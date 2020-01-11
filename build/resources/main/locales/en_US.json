@@ -1,0 +1,15 @@
+{
+  "label" : "StringUtils",
+  "description" : "Provides actions for String operations.",
+  "Concatenate.label" : "Concatenate",
+  "Concatenate.description" : "Concatenates two strings",
+  "Concatenate.node_label" : "Concatenate {{firstString}} with {{secondString}}",
+  "Concatenate.return_label" : "Assign the output to variable",
+  "Uppercase.label" : "Uppercase",
+  "Uppercase.description" : "Uppercase",
+  "Uppercase.node_label" : "Uppercase {{sourceString}}",
+  "Uppercase.return_label" : "Assign the output to variable",
+  "Concatenate.firstString.label" : "First string",
+  "Concatenate.secondString.label" : "Second string",
+  "Uppercase.sourceString.label" : "Source string"
+}

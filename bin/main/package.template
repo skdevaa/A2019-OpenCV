@@ -1,0 +1,10 @@
+{
+  "name": "OpenCV",
+  "label": "OpenCV",
+  "description": "Provides actions for OpenCV operations.",
+  "group": "",
+  "artifactName": "",
+  "packageVersion": "",
+  "codeVersion": "",
+  "commands": []
+}
