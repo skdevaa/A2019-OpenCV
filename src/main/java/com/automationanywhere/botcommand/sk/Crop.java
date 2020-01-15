@@ -1,5 +1,5 @@
 /*
-C:\Users\Stefan Karsten\Documents\AlleDateien\Demos\Packages\IBM Watson * Copyright (c) 2019 Automation Anywhere.
+ * Copyright (c) 2019 Automation Anywhere.
  * All rights reserved.
  *
  * This software is the proprietary information of Automation Anywhere.
@@ -13,13 +13,11 @@ package com.automationanywhere.botcommand.sk;
 
 
 
-import static com.automationanywhere.commandsdk.model.AttributeType.TEXT;
+
 import static com.automationanywhere.commandsdk.model.AttributeType.NUMBER;
 
-import static com.automationanywhere.commandsdk.model.DataType.STRING;
 
-import java.net.MalformedURLException;
-import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +26,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
-import org.opencv.highgui.HighGui;
+
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -40,11 +38,8 @@ import com.automationanywhere.commandsdk.annotations.Pkg;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import com.automationanywhere.commandsdk.model.AttributeType;
 import com.automationanywhere.commandsdk.model.DataType;
-
-
-import com.automationanywhere.commandsdk.annotations.ConditionTest;
 import com.automationanywhere.commandsdk.annotations.Execute;
-import com.automationanywhere.commandsdk.annotations.BotCommand.CommandType;
+
 /**
  * @author Stefan Karsten
  *
@@ -54,50 +49,49 @@ import com.automationanywhere.commandsdk.annotations.BotCommand.CommandType;
 @BotCommand
 @CommandPkg(label = "Crop Image", name = "cropimage",
         description = "Crop Image",
-        node_label = " Crop Image", icon = "")
+        node_label = "Crop Image", icon = "")
 public class Crop  {
 
 
 		@Execute
          public void action (@Idx(index = "1", type = AttributeType.FILE)  @Pkg(label = "Orig. Image" , default_value_type =  DataType.FILE) @NotEmpty String imagefile,
-        		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Sharpen Image" , default_value_type =  DataType.FILE) @NotEmpty String savefile,
-        		                     @Idx(index = "3", type = NUMBER) @Pkg(label = "Threshold"  , default_value_type = DataType.NUMBER ) @NotEmpty Number threshold ) throws Exception
+        		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Cropped Image 1" , default_value_type =  DataType.FILE) @NotEmpty String savefile1,
+        		                     @Idx(index = "3", type = AttributeType.FILE)  @Pkg(label = "Cropped Image 2" , default_value_type =  DataType.FILE)  String savefile2,
+        		                     @Idx(index = "4", type = AttributeType.FILE)  @Pkg(label = "Cropped Image 3" , default_value_type =  DataType.FILE)  String savefile3,
+        		                     @Idx(index = "5", type = NUMBER) @Pkg(label = "Threshold"  , default_value_type = DataType.NUMBER ) @NotEmpty Number threshold ) throws Exception
          {    
-        	 
         	 
    		  	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
              Mat image = Imgcodecs.imread(imagefile);
+             
+             int count = 1;
 
+             if (savefile2 != null) count++;
+             if (savefile3 != null) count++;
              
              Mat imagebw = Mat.zeros(image.size(), image.type());
-             Mat imagenew = Mat.zeros(image.size(), image.type());
+             Mat imagenew1 = new Mat();
+             Mat imagenew2 = new Mat();
+             Mat imagenew3 = new Mat();
              Imgproc.cvtColor(image, imagebw, Imgproc.COLOR_BGR2GRAY);
 
-             Imgproc.threshold(imagebw, imagebw, threshold.doubleValue(),255, Imgproc.THRESH_BINARY_INV);
-
-             Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(11,11));
-             Imgproc.morphologyEx(imagebw, imagebw, Imgproc.MORPH_CLOSE, kernel); 
-
-
-              MatOfPoint maxContour = null ;
-              Mat hierarchy = new Mat();
-              double maxVal = 0;
-              List<MatOfPoint> contours = new ArrayList<>();
-             Imgproc.findContours(imagebw, contours,hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-              for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++)
-              {
-                 double contourArea = Imgproc.contourArea(contours.get(contourIdx));
-     		     if (maxVal < contourArea)
-                 {
-                     maxVal = contourArea;
-                     maxContour = contours.get(contourIdx);
-                 }
+             List<MatOfPoint> contours  = OpenCVUtils.maxContours(imagebw,threshold.intValue(),count) ;
+             Rect boundingrect1 = Imgproc.boundingRect(new MatOfPoint(contours.get(0).toArray()));
+             imagenew1 = image.submat(boundingrect1);
+             Imgcodecs.imwrite(savefile1, imagenew1);
+             
+             if (savefile2 != null && contours.size()>=2)  { 
+            	 Rect boundingrect2 = Imgproc.boundingRect(new MatOfPoint(contours.get(1).toArray()));
+                 imagenew2 = image.submat(boundingrect2);
+                 Imgcodecs.imwrite(savefile2, imagenew2);
+             }
+             
+             if (savefile3 != null && contours.size()>=3)  { 
+            	 Rect boundingrect3 = Imgproc.boundingRect(new MatOfPoint(contours.get(2).toArray()));
+                 imagenew3 = image.submat(boundingrect3);
+                 Imgcodecs.imwrite(savefile3, imagenew3);
              }
 
-             Rect boundingrect = Imgproc.boundingRect(new MatOfPoint(maxContour.toArray()));
-             imagenew = image.submat(boundingrect);
-
-             Imgcodecs.imwrite(savefile, imagenew);
         
          }
 }

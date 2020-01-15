@@ -35,9 +35,11 @@ public final class CropCommand implements BotCommand {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","imagefile"));
     }
 
-    if(parameters.get("savefile") == null || parameters.get("savefile").get() == null) {
-      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","savefile"));
+    if(parameters.get("savefile1") == null || parameters.get("savefile1").get() == null) {
+      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","savefile1"));
     }
+
+
 
     if(parameters.get("threshold") == null || parameters.get("threshold").get() == null) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","threshold"));
@@ -46,14 +48,20 @@ public final class CropCommand implements BotCommand {
     if(parameters.get("imagefile") != null && parameters.get("imagefile").get() != null && !(parameters.get("imagefile").get() instanceof String)) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","imagefile", "String", parameters.get("imagefile").get().getClass().getSimpleName()));
     }
-    if(parameters.get("savefile") != null && parameters.get("savefile").get() != null && !(parameters.get("savefile").get() instanceof String)) {
-      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","savefile", "String", parameters.get("savefile").get().getClass().getSimpleName()));
+    if(parameters.get("savefile1") != null && parameters.get("savefile1").get() != null && !(parameters.get("savefile1").get() instanceof String)) {
+      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","savefile1", "String", parameters.get("savefile1").get().getClass().getSimpleName()));
+    }
+    if(parameters.get("savefile2") != null && parameters.get("savefile2").get() != null && !(parameters.get("savefile2").get() instanceof String)) {
+      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","savefile2", "String", parameters.get("savefile2").get().getClass().getSimpleName()));
+    }
+    if(parameters.get("savefile3") != null && parameters.get("savefile3").get() != null && !(parameters.get("savefile3").get() instanceof String)) {
+      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","savefile3", "String", parameters.get("savefile3").get().getClass().getSimpleName()));
     }
     if(parameters.get("threshold") != null && parameters.get("threshold").get() != null && !(parameters.get("threshold").get() instanceof Number)) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","threshold", "Number", parameters.get("threshold").get().getClass().getSimpleName()));
     }
     try {
-      command.action(parameters.get("imagefile") != null ? (String)parameters.get("imagefile").get() : (String)null ,parameters.get("savefile") != null ? (String)parameters.get("savefile").get() : (String)null ,parameters.get("threshold") != null ? (Number)parameters.get("threshold").get() : (Number)null );Optional<Value> result = Optional.empty();
+      command.action(parameters.get("imagefile") != null ? (String)parameters.get("imagefile").get() : (String)null ,parameters.get("savefile1") != null ? (String)parameters.get("savefile1").get() : (String)null ,parameters.get("savefile2") != null ? (String)parameters.get("savefile2").get() : (String)null ,parameters.get("savefile3") != null ? (String)parameters.get("savefile3").get() : (String)null ,parameters.get("threshold") != null ? (Number)parameters.get("threshold").get() : (Number)null );Optional<Value> result = Optional.empty();
       logger.traceExit(result);
       return result;
     }

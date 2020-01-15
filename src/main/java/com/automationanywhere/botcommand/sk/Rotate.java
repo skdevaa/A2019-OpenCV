@@ -11,11 +11,18 @@
  */
 package com.automationanywhere.botcommand.sk;
 
+
+
+
 import static com.automationanywhere.commandsdk.model.AttributeType.NUMBER;
+
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -31,36 +38,31 @@ import com.automationanywhere.commandsdk.annotations.Execute;
 
 /**
  * @author Stefan Karsten
+ * @param <imagerotate>
  *
  */
 
 @BotCommand
-@CommandPkg(label = "Sharpen Image", name = "sharpenimage",
-        description = "Sharpen Image",
-        node_label = "Sharpen Image", icon = "")
-public class Sharpen  {
+@CommandPkg(label = "Rotate Image", name = "rotateimage",
+        description = "Rotate Image",
+        node_label = "Rotate Image", icon = "")
+public class Rotate<imagerotate>  {
 
 
 		@Execute
          public void action (@Idx(index = "1", type = AttributeType.FILE)  @Pkg(label = "Orig. Image" , default_value_type =  DataType.FILE) @NotEmpty String imagefile,
-        		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Sharpen Image" , default_value_type =  DataType.FILE) @NotEmpty String savefile,
-        		                     @Idx(index = "3", type = NUMBER) @Pkg(label = "Gaussian Blur Sigma"  , default_value_type = DataType.NUMBER ) @NotEmpty Number sigma,
-        		                     @Idx(index = "4", type = NUMBER) @Pkg(label = "Weighted Alpha"  , default_value_type = DataType.NUMBER ) @NotEmpty Number alpha,
-        		                     @Idx(index = "5", type = NUMBER) @Pkg(label = "Weighted Beta"  , default_value_type = DataType.NUMBER ) @NotEmpty Number beta,
-        		                     @Idx(index = "6", type = NUMBER) @Pkg(label = "Weighted Gamma"  , default_value_type = DataType.NUMBER ) @NotEmpty Number gamma) throws Exception
+        		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Rotated Image" , default_value_type =  DataType.FILE) @NotEmpty String savefile,
+        		                     @Idx(index = "3", type = NUMBER) @Pkg(label = "Angle (Degree)"  , default_value_type = DataType.NUMBER ) @NotEmpty Number angle) throws Exception
          {    
         	 
         	 
    		  	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
              Mat image = Imgcodecs.imread(imagefile);
 
+             Mat imagerot = OpenCVUtils.imagerotate(image,angle.intValue());
+
+             Imgcodecs.imwrite(savefile,  imagerot );
              
-             Mat imagebw = Mat.zeros(image.size(), image.type());
-             Mat imagenew = Mat.zeros(image.size(), image.type());
-     		Imgproc.cvtColor(image, imagebw, Imgproc. COLOR_BGR2GRAY);
-             Imgproc.GaussianBlur(imagebw, imagenew, new Size(0, 0), sigma.doubleValue());
-             Core.addWeighted(imagebw, alpha.doubleValue(), imagenew, beta.doubleValue(), gamma.doubleValue(),imagenew);
-             Imgcodecs.imwrite(savefile, imagenew);
         
          }
 }
