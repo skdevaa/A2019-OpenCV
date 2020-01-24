@@ -44,6 +44,7 @@ public final class DetectObjectsCommand implements BotCommand {
     }
 
 
+
     if(parameters.get("imagefile") != null && parameters.get("imagefile").get() != null && !(parameters.get("imagefile").get() instanceof String)) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","imagefile", "String", parameters.get("imagefile").get().getClass().getSimpleName()));
     }
@@ -53,11 +54,14 @@ public final class DetectObjectsCommand implements BotCommand {
     if(parameters.get("xmlfile") != null && parameters.get("xmlfile").get() != null && !(parameters.get("xmlfile").get() instanceof String)) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","xmlfile", "String", parameters.get("xmlfile").get().getClass().getSimpleName()));
     }
+    if(parameters.get("areafilter") != null && parameters.get("areafilter").get() != null && !(parameters.get("areafilter").get() instanceof Number)) {
+      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","areafilter", "Number", parameters.get("areafilter").get().getClass().getSimpleName()));
+    }
     if(parameters.get("noofobjects") != null && parameters.get("noofobjects").get() != null && !(parameters.get("noofobjects").get() instanceof Number)) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","noofobjects", "Number", parameters.get("noofobjects").get().getClass().getSimpleName()));
     }
     try {
-      Optional<Value> result =  Optional.ofNullable(command.action(parameters.get("imagefile") != null ? (String)parameters.get("imagefile").get() : (String)null ,parameters.get("savefile") != null ? (String)parameters.get("savefile").get() : (String)null ,parameters.get("xmlfile") != null ? (String)parameters.get("xmlfile").get() : (String)null ,parameters.get("noofobjects") != null ? (Number)parameters.get("noofobjects").get() : (Number)null ));
+      Optional<Value> result =  Optional.ofNullable(command.action(parameters.get("imagefile") != null ? (String)parameters.get("imagefile").get() : (String)null ,parameters.get("savefile") != null ? (String)parameters.get("savefile").get() : (String)null ,parameters.get("xmlfile") != null ? (String)parameters.get("xmlfile").get() : (String)null ,parameters.get("areafilter") != null ? (Number)parameters.get("areafilter").get() : (Number)null ,parameters.get("noofobjects") != null ? (Number)parameters.get("noofobjects").get() : (Number)null ));
       logger.traceExit(result);
       return result;
     }

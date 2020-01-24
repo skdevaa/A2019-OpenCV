@@ -38,7 +38,7 @@ import com.automationanywhere.commandsdk.annotations.Execute;
 @CommandPkg(label = "Contrast Brightness Image", name = "contrastimage",
         description = "Contrast Brightness Image",
         node_label = "Contrast Brightness Image", icon = "")
-public class Brighness_Contrast  {
+public class Brightness_Contrast  {
 
 
 		@Execute

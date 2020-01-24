@@ -53,12 +53,14 @@ public class DetectObjects  {
          public NumberValue action (@Idx(index = "1", type = AttributeType.FILE)  @Pkg(label = "Orig. Image" , default_value_type =  DataType.FILE) @NotEmpty String imagefile,
         		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Image with Objects" , default_value_type =  DataType.FILE) @NotEmpty String savefile,
         		                     @Idx(index = "3", type = AttributeType.FILE)  @Pkg(label = "Cascade Classifier XML File" , default_value_type =  DataType.FILE) @NotEmpty String xmlfile,
-        		                     @Idx(index = "4", type = AttributeType.NUMBER) @Pkg(label = "Number of Top Objects"  , default_value_type = DataType.NUMBER ) Number noofobjects) throws Exception
+        		                     @Idx(index = "4", type = AttributeType.NUMBER)  @Pkg(label = "Min Arear" , default_value_type =  DataType.NUMBER)  Number areafilter,
+        		                     @Idx(index = "5", type = AttributeType.NUMBER) @Pkg(label = "Number of Top Objects"  , default_value_type = DataType.NUMBER ) Number noofobjects) throws Exception
          {    
         	 
 			NumberValue returnvalue = new NumberValue();
 			
 			int limit = (int) ((noofobjects != null) ? noofobjects.longValue() : 100);
+			long filter= (int) ((areafilter!= null) ? areafilter.longValue() : Long.MAX_VALUE);
         	 
    		  	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
              Mat image = Imgcodecs.imread(imagefile);
@@ -86,12 +88,14 @@ public class DetectObjects  {
              ); 
              
              for (Rect rect : objectDetections.toArray()) {
-              	rq.add(rect);
+            	if (rect.area() >= filter) {
+            		rq.add(rect);
+            	}
               }
 
              // Drawing boxes
              Integer objCounter = 0;
-     		 for (int i= 0;i<limit && i < objectDetections.toArray().length ;i++) {
+     		 for (int i= 0;i<limit && i < rq.size() ;i++) {
              	   objCounter++;
              	   Rect rect = rq.poll();
                 Imgproc.rectangle(

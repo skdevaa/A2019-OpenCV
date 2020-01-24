@@ -46,8 +46,8 @@ public class Denoise  {
 
 
 		@Execute
-         public void action (@Idx(index = "1", type = AttributeType.FILE)  @Pkg(label = "Orig. Gray Image" , default_value_type =  DataType.FILE) @NotEmpty String imagefile,
-        		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Denoised Imagee" , default_value_type =  DataType.FILE) @NotEmpty String savefile,
+         public void action (@Idx(index = "1", type = AttributeType.FILE)  @Pkg(label = "Orig. Image" , default_value_type =  DataType.FILE) @NotEmpty String imagefile,
+        		                     @Idx(index = "2", type = AttributeType.FILE)  @Pkg(label = "Denoised Image" , default_value_type =  DataType.FILE) @NotEmpty String savefile,
         		                     @Idx(index = "3", type = NUMBER) @Pkg(label = " Filter Strength"  , default_value_type = DataType.NUMBER ) @NotEmpty Number filter) throws Exception
          {    
         	 

@@ -23,7 +23,7 @@ public class OpenCVUtils {
 
         Mat hierarchy = new Mat();
         List<MatOfPoint> contours = new ArrayList<>();
-       Imgproc.findContours(croptemp, contours,hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+       Imgproc.findContours(croptemp, contours,hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
        System.out.println("Count "+contours.size());
        contours.sort((c1,c2) -> Double.compare(Imgproc.contourArea(c2),Imgproc.contourArea(c1)));
        return contours.subList(0, count);
